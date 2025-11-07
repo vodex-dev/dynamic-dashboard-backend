@@ -96,18 +96,25 @@ router.get("/users", authMiddleware, async (req, res) => {
    ============================================================ */
 router.get("/users/:userId/pages", authMiddleware, async (req, res) => {
   try {
+    // ✅ معالجة الـ ID حسب التوكن
+    const requesterId = req.user.userId || req.user.id;
+    const targetId = req.params.userId;
+
     // 🔒 السماح فقط للإدمن أو المستخدم نفسه
-    if (req.user.role !== "admin" && req.user.id !== req.params.userId) {
+    if (req.user.role !== "admin" && requesterId !== targetId) {
       return res.status(403).json({ message: "Access denied" });
     }
 
     // 🔍 جلب المستخدم مع الصفحات المسموحة
-    const user = await User.findById(req.params.userId).populate("allowedPages", "name");
+    const user = await User.findById(targetId).populate("allowedPages", "name");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json({ data: user.allowedPages });
+    // ✅ إرجاع الصفحات المسموحة
+    res.status(200).json({
+      data: user.allowedPages || [],
+    });
   } catch (error) {
     console.error("❌ Error fetching user pages:", error);
     res.status(500).json({ message: "Failed to fetch user pages" });
