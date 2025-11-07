@@ -4,7 +4,12 @@ const sectionSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true, // ماكو سكشن بنفس الاسم
+    unique: true,
+  },
+  pageId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Page",
+    required: true,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
