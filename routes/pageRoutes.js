@@ -3,17 +3,22 @@ const router = express.Router();
 const Page = require("../models/Page");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// ✅ جلب جميع الصفحات
-router.get("/", authMiddleware, async (req, res) => {
+/* =====================================================
+   ✅ جلب جميع الصفحات (مفتوح للعامة - لا يحتاج توكن)
+===================================================== */
+router.get("/", async (req, res) => {
   try {
     const pages = await Page.find();
     res.status(200).json(pages);
   } catch (err) {
+    console.error("Error fetching pages:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// ✅ إنشاء صفحة جديدة (Admins فقط)
+/* =====================================================
+   🔒 إنشاء صفحة جديدة (Admins فقط)
+===================================================== */
 router.post("/", authMiddleware, async (req, res) => {
   try {
     if (req.user.role !== "admin") {
@@ -26,11 +31,14 @@ router.post("/", authMiddleware, async (req, res) => {
 
     res.status(201).json(newPage);
   } catch (err) {
+    console.error("Error creating page:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// ✅ تحديث صفحة
+/* =====================================================
+   🔒 تحديث صفحة (Admins فقط)
+===================================================== */
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     if (req.user.role !== "admin") {
@@ -45,11 +53,14 @@ router.put("/:id", authMiddleware, async (req, res) => {
 
     res.status(200).json(updatedPage);
   } catch (err) {
+    console.error("Error updating page:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// ✅ حذف صفحة
+/* =====================================================
+   🔒 حذف صفحة (Admins فقط)
+===================================================== */
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     if (req.user.role !== "admin") {
@@ -59,6 +70,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     await Page.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Page deleted successfully" });
   } catch (err) {
+    console.error("Error deleting page:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
