@@ -88,4 +88,55 @@ router.get("/users", authMiddleware, async (req, res) => {
   }
 });
 
+const authMiddleware = require("../middleware/authMiddleware");
+const User = require("../models/User");
+
+// ✅ جلب الصفحات المسموحة لمستخدم معيّن
+router.get("/users/:userId/pages", authMiddleware, async (req, res) => {
+  try {
+    // السماح للإدمن أو المستخدم نفسه فقط
+    if (req.user.role !== "admin" && req.user.id !== req.params.userId) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const user = await User.findById(req.params.userId).populate("allowedPages", "name");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ data: user.allowedPages });
+  } catch (error) {
+    console.error("❌ Error fetching user pages:", error);
+    res.status(500).json({ message: "Failed to fetch user pages" });
+  }
+});
+
+// ✅ تحديث الصفحات المسموحة لمستخدم معيّن (Admins فقط)
+router.put("/users/:userId/pages", authMiddleware, async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admin only." });
+    }
+
+    const { pageIds } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      { allowedPages: pageIds },
+      { new: true }
+    ).populate("allowedPages", "name");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "✅ User pages updated successfully",
+      data: updatedUser.allowedPages,
+    });
+  } catch (error) {
+    console.error("❌ Error updating user pages:", error);
+    res.status(500).json({ message: "Failed to update user pages" });
+  }
+});
+
+
 module.exports = router;
