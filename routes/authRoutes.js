@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
+const User = require("../models/User");
 
 /* ============================================================
    🧩 تسجيل مستخدم جديد
@@ -88,8 +89,6 @@ router.get("/users", authMiddleware, async (req, res) => {
   }
 });
 
-const authMiddleware = require("../middleware/authMiddleware");
-const User = require("../models/User");
 
 // ✅ جلب الصفحات المسموحة لمستخدم معيّن
 router.get("/users/:userId/pages", authMiddleware, async (req, res) => {
