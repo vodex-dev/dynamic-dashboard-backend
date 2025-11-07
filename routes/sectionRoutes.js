@@ -58,4 +58,26 @@ router.post("/", authMiddleware, adminOnly, async (req, res) => {
   }
 });
 
+/* =====================================================
+   🗑️ حذف سكشن (Admins فقط)
+===================================================== */
+router.delete("/:id", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const section = await Section.findByIdAndDelete(req.params.id);
+
+    if (!section) {
+      return res.status(404).json({ message: "❌ السكشن غير موجود" });
+    }
+
+    res.json({ message: "✅ تم حذف السكشن بنجاح" });
+  } catch (err) {
+    console.error("❌ خطأ في حذف السكشن:", err);
+    res.status(500).json({
+      error: "فشل في حذف السكشن",
+      details: err.message,
+    });
+  }
+});
+
+
 module.exports = router;
