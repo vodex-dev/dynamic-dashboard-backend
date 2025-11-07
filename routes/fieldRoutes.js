@@ -81,9 +81,9 @@ router.put("/:id", authMiddleware, adminOnly, async (req, res) => {
 });
 
 /* ============================================================
-   🔒 تعديل محتوى الحقل فقط (Admins فقط)
+   ✏️ تعديل محتوى الحقل فقط (User أو Admin)
    ============================================================ */
-router.patch("/:id/content", authMiddleware, adminOnly, async (req, res) => {
+router.patch("/:id/content", authMiddleware, async (req, res) => {
   try {
     const { content } = req.body;
     const field = await Field.findById(req.params.id);
@@ -92,6 +92,9 @@ router.patch("/:id/content", authMiddleware, adminOnly, async (req, res) => {
       return res.status(404).json({ message: "❌ الحقل غير موجود" });
     }
 
+    console.log(`👤 المستخدم ${req.user.id} يقوم بتحديث محتوى الحقل ${req.params.id}`);
+
+    // تحديث فقط المحتوى
     field.content = content;
     await field.save();
 
