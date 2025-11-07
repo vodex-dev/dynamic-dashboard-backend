@@ -1,19 +1,17 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const Section = require("../models/Section");
-const authMiddleware = require("../middleware/authMiddleware");
-const adminOnly = require("../middleware/adminOnly");
+const Section = require('../models/Section');
+const authMiddleware = require('../middleware/authMiddleware');
+const adminOnly = require('../middleware/adminOnly');
 
-router.post("/", authMiddleware, adminOnly, async (req, res) => {
+// 🟢 إنشاء سكشن جديد
+router.post('/', authMiddleware, adminOnly, async (req, res) => {
+  const { name, pageId } = req.body;
+  if (!name || !pageId) {
+    return res.status(400).json({ error: '❌ لازم تدخل اسم و pageId' });
+  }
+
   try {
-    const { name, pageId } = req.body;
-
-    if (!name || !pageId) {
-      return res
-        .status(400)
-        .json({ error: "يجب إدخال name و pageId كلاهما" });
-    }
-
     const newSection = await Section.create({
       name,
       pageId,
@@ -21,28 +19,35 @@ router.post("/", authMiddleware, adminOnly, async (req, res) => {
     });
 
     res.status(201).json({
-      message: "✅ تم إنشاء السكشن بنجاح",
+      message: '✅ تم إنشاء السكشن بنجاح',
       section: newSection,
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({
-      error: "حدث خطأ في السيرفر ❌",
-      details: err.message,
-    });
+    res.status(500).json({ error: '❌ فشل في إنشاء السكشن', details: err.message });
   }
 });
 
-router.get("/", async (req, res) => {
+// 🟡 جلب كل السكشنز لصفحة معينة
+router.get('/:pageId', authMiddleware, async (req, res) => {
+  try {
+    const { pageId } = req.params;
+    const sections = await Section.find({ pageId });
+    res.json(sections);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: '❌ فشل في جلب السكشنات', details: err.message });
+  }
+});
+
+// 🔵 (اختياري) جلب كل السكشنات بالنظام
+router.get('/', async (req, res) => {
   try {
     const sections = await Section.find();
     res.json(sections);
   } catch (err) {
     console.error(err);
-    res.status(500).json({
-      error: "حدث خطأ في السيرفر ❌",
-      details: err.message,
-    });
+    res.status(500).json({ error: '❌ فشل في جلب السكشنات', details: err.message });
   }
 });
 
