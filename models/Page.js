@@ -1,21 +1,19 @@
-const express = require("express");
-const router = express.Router();
-const authMiddleware = require("../middleware/authMiddleware");
-const adminOnly = require("../middleware/adminOnly");
+const mongoose = require("mongoose");
 
-// 🧱 مثال على صفحة عامة
-router.get("/public", (req, res) => {
-  res.json({ message: "🌍 صفحة عامة - متاحة للجميع" });
+const pageSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-// 🔐 مثال على صفحة خاصة للمستخدمين المسجلين
-router.get("/private", authMiddleware, (req, res) => {
-  res.json({ message: `🔒 أهلاً ${req.user.role}، هذه صفحة خاصة` });
-});
-
-// 👑 مثال على صفحة للأدمن فقط
-router.get("/admin", authMiddleware, adminOnly, (req, res) => {
-  res.json({ message: "👑 أهلاً أدمن، عندك صلاحية كاملة" });
-});
-
-module.exports = router;
+module.exports = mongoose.model("Page", pageSchema);
