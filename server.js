@@ -14,7 +14,7 @@ const collectionRoutes = require("./routes/collectionRoutes");
 const collectionItemRoutes = require("./routes/collectionItemRoutes");
 const uploadRoutes = require("./routes/uploadRoutes"); // ✅ الصحيح
 const collectionUploadRoutes = require("./routes/collectionUploadRoutes");
-
+const formRoutes = require("./routes/forms");
 
 const app = express();
 
@@ -30,7 +30,7 @@ app.use("/api/collections", collectionRoutes);
 app.use("/api/collection-items", collectionItemRoutes);
 app.use("/api/upload", uploadRoutes); // ✅ مسار رفع الصور إلى Cloudflare R2
 app.use("/api/collection-uploads", collectionUploadRoutes);
-
+app.use("/api/forms", formRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)
