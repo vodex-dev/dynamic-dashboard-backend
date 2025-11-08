@@ -41,4 +41,11 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+allowedForms: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Form",
+  },
+],
+
 module.exports = mongoose.model("User", userSchema);

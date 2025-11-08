@@ -4,6 +4,7 @@ const router = express.Router();
 const Form = require("../models/Form");
 const FormField = require("../models/FormField");
 const FormResponse = require("../models/FormResponse");
+const User = require("../models/User"); // ✅ مضافة لدعم allowedForms
 const authMiddleware = require("../middleware/authMiddleware");
 const adminOnly = require("../middleware/adminOnly");
 
@@ -31,11 +32,25 @@ router.post("/", authMiddleware, adminOnly, async (req, res) => {
 });
 
 /* ============================================================
-   📋 جلب جميع الفورمات (Admins فقط)
+   📋 جلب جميع الفورمات
+   - Admin: يشوف الكل
+   - User: يشوف فقط الفورمات المسموحة له
 ============================================================ */
-router.get("/", authMiddleware, adminOnly, async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   try {
-    const forms = await Form.find().populate("createdBy", "username");
+    const user = req.user;
+
+    // ✅ في حالة الأدمن → عرض جميع الفورمات
+    if (user.role === "admin") {
+      const forms = await Form.find().populate("createdBy", "username");
+      return res.status(200).json(forms);
+    }
+
+    // ✅ المستخدم العادي → عرض الفورمات المسموحة له فقط
+    const userDoc = await User.findById(user.userId).populate("allowedForms");
+    const allowedFormIds = userDoc.allowedForms.map((f) => f._id);
+
+    const forms = await Form.find({ _id: { $in: allowedFormIds } });
     res.status(200).json(forms);
   } catch (err) {
     console.error("❌ خطأ في جلب الفورمات:", err);
@@ -44,7 +59,7 @@ router.get("/", authMiddleware, adminOnly, async (req, res) => {
 });
 
 /* ============================================================
-   🧱 إضافة حقل جديد لفورم
+   🧱 إضافة حقل جديد لفورم (Admins فقط)
 ============================================================ */
 router.post("/:formId/fields", authMiddleware, adminOnly, async (req, res) => {
   try {
@@ -97,7 +112,7 @@ router.get("/:formId/fields", authMiddleware, async (req, res) => {
 });
 
 /* ============================================================
-   📬 استقبال الردود من المستخدمين (فرونت خارجي)
+   📬 استقبال الردود من المستخدمين (واجهة عامة - بدون توكن)
 ============================================================ */
 router.post("/:formId/submit", async (req, res) => {
   try {
@@ -111,7 +126,7 @@ router.post("/:formId/submit", async (req, res) => {
     const userData = req.body;
     const validData = {};
 
-    // تحقق من الحقول المسموحة فقط
+    // ✅ تحقق من الحقول المسموحة فقط
     form.fields.forEach((field) => {
       if (userData[field.name] !== undefined) {
         validData[field.name] = userData[field.name];

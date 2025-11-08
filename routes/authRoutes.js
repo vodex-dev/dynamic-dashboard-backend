@@ -7,21 +7,17 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 /* ============================================================
    🧩 تسجيل مستخدم جديد (Register)
-   ============================================================ */
+============================================================ */
 router.post("/register", async (req, res) => {
   try {
     const { username, password, role } = req.body;
 
-    // 🔍 التحقق من وجود المستخدم مسبقًا
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ message: "❌ المستخدم موجود بالفعل" });
     }
 
-    // 🔒 تشفير كلمة المرور
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // 🧱 إنشاء مستخدم جديد
     const user = new User({ username, password: hashedPassword, role });
     await user.save();
 
@@ -34,31 +30,27 @@ router.post("/register", async (req, res) => {
 
 /* ============================================================
    🔐 تسجيل الدخول (Login)
-   ============================================================ */
+============================================================ */
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // 🔍 التحقق من وجود المستخدم
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: "❌ اسم المستخدم غير موجود" });
     }
 
-    // 🔑 مقارنة كلمة المرور
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "❌ كلمة المرور غير صحيحة" });
     }
 
-    // 🪪 إنشاء Token
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // 🎉 إرسال الرد
     res.json({
       message: "✅ تسجيل الدخول ناجح",
       token,
@@ -72,17 +64,14 @@ router.post("/login", async (req, res) => {
 
 /* ============================================================
    👑 جلب جميع المستخدمين (Admins فقط)
-   ============================================================ */
+============================================================ */
 router.get("/users", authMiddleware, async (req, res) => {
   try {
-    // 🔒 السماح فقط للإدمن
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Access denied. Admin only." });
     }
 
-    // 📋 جلب جميع المستخدمين مع استبعاد كلمة المرور
     const users = await User.find({}, { password: 0 });
-
     res.status(200).json({ data: users });
   } catch (error) {
     console.error("❌ Error fetching users:", error);
@@ -91,27 +80,22 @@ router.get("/users", authMiddleware, async (req, res) => {
 });
 
 /* ============================================================
-   📜 جلب الصفحات المسموح بها لمستخدم معيّن
-   (Admins أو المستخدم نفسه فقط)
-   ============================================================ */
+   📜 الصفحات المسموح بها (Pages)
+============================================================ */
 router.get("/users/:userId/pages", authMiddleware, async (req, res) => {
   try {
-    // ✅ معالجة الـ ID حسب التوكن
     const requesterId = req.user.userId || req.user.id;
     const targetId = req.params.userId;
 
-    // 🔒 السماح فقط للإدمن أو المستخدم نفسه
     if (req.user.role !== "admin" && requesterId !== targetId) {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    // 🔍 جلب المستخدم مع الصفحات المسموحة
     const user = await User.findById(targetId).populate("allowedPages", "name");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // ✅ إرجاع الصفحات المسموحة
     res.status(200).json({
       data: user.allowedPages || [],
     });
@@ -121,19 +105,14 @@ router.get("/users/:userId/pages", authMiddleware, async (req, res) => {
   }
 });
 
-/* ============================================================
-   ✏️ تحديث الصفحات المسموح بها لمستخدم معيّن (Admins فقط)
-   ============================================================ */
 router.put("/users/:userId/pages", authMiddleware, async (req, res) => {
   try {
-    // 🔒 السماح فقط للإدمن
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Access denied. Admin only." });
     }
 
     const { pageIds } = req.body;
 
-    // 🧱 تحديث الصفحات المسموح بها
     const updatedUser = await User.findByIdAndUpdate(
       req.params.userId,
       { allowedPages: pageIds },
@@ -153,21 +132,19 @@ router.put("/users/:userId/pages", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Failed to update user pages" });
   }
 });
+
 /* ============================================================
-   📦 جلب الكولكشنز المسموح بها لمستخدم معيّن
-   (Admins أو المستخدم نفسه فقط)
-   ============================================================ */
+   📦 الكولكشنز المسموح بها (Collections)
+============================================================ */
 router.get("/users/:userId/collections", authMiddleware, async (req, res) => {
   try {
     const requesterId = req.user.userId || req.user.id;
     const targetId = req.params.userId;
 
-    // 🔒 السماح فقط للإدمن أو المستخدم نفسه
     if (req.user.role !== "admin" && requesterId !== targetId) {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    // 🔍 جلب المستخدم مع الكولكشنز المسموحة
     const user = await User.findById(targetId).populate("collections", "name");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -182,9 +159,6 @@ router.get("/users/:userId/collections", authMiddleware, async (req, res) => {
   }
 });
 
-/* ============================================================
-   ✏️ تحديث الكولكشنز المسموح بها لمستخدم معيّن (Admins فقط)
-   ============================================================ */
 router.put("/users/:userId/collections", authMiddleware, async (req, res) => {
   try {
     if (req.user.role !== "admin") {
@@ -210,6 +184,60 @@ router.put("/users/:userId/collections", authMiddleware, async (req, res) => {
   } catch (error) {
     console.error("❌ Error updating user collections:", error);
     res.status(500).json({ message: "Failed to update user collections" });
+  }
+});
+
+/* ============================================================
+   🧾 الفورمات المسموح بها (Forms)
+============================================================ */
+router.get("/users/:userId/forms", authMiddleware, async (req, res) => {
+  try {
+    const requesterId = req.user.userId || req.user.id;
+    const targetId = req.params.userId;
+
+    if (req.user.role !== "admin" && requesterId !== targetId) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const user = await User.findById(targetId).populate("allowedForms", "name");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      data: user.allowedForms || [],
+    });
+  } catch (error) {
+    console.error("❌ Error fetching user forms:", error);
+    res.status(500).json({ message: "Failed to fetch user forms" });
+  }
+});
+
+router.put("/users/:userId/forms", authMiddleware, async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admin only." });
+    }
+
+    const { formIds } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      { allowedForms: formIds },
+      { new: true }
+    ).populate("allowedForms", "name");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "✅ User forms updated successfully",
+      data: updatedUser.allowedForms,
+    });
+  } catch (error) {
+    console.error("❌ Error updating user forms:", error);
+    res.status(500).json({ message: "Failed to update user forms" });
   }
 });
 
