@@ -7,4 +7,7 @@ const s3 = new AWS.S3({
   signatureVersion: "v4",
 });
 
-module.exports = s3;
+// هذا هو رابط الـ Public Development URL من Cloudflare
+const PUBLIC_R2_URL = "https://pub-bb55e537cfe7423592cd37fd68a6c6a7.r2.dev";
+
+module.exports = { s3, PUBLIC_R2_URL };

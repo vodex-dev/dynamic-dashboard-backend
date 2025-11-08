@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
-const s3 = require("../utils/r2");
+const { s3, PUBLIC_R2_URL } = require("../utils/r2");
 const Image = require("../models/Image");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -26,7 +26,8 @@ router.post("/", authMiddleware, upload.single("file"), async (req, res) => {
 
     await s3.upload(params).promise();
 
-    const fileUrl = `${process.env.CLOUDFLARE_R2_ENDPOINT}/${process.env.CLOUDFLARE_R2_BUCKET}/${fileKey}`;
+    // 🔗 استخدم رابط الـ Public Development URL بدلاً من الـ private
+    const fileUrl = `${PUBLIC_R2_URL}/${fileKey}`;
 
     // حفظ معلومات الصورة في قاعدة البيانات
     const image = await Image.create({
