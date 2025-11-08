@@ -27,7 +27,8 @@ router.post("/", authMiddleware, upload.single("file"), async (req, res) => {
     await s3.upload(params).promise();
 
     // 🔗 استخدم رابط الـ Public Development URL بدلاً من الـ private
-    const fileUrl = `${PUBLIC_R2_URL}/${fileKey}`;
+    const fileUrl = `${process.env.CLOUDFLARE_R2_PUBLIC_URL}/${fileKey}`;
+
 
     // حفظ معلومات الصورة في قاعدة البيانات
     const image = await Image.create({
