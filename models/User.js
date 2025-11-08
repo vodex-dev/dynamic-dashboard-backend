@@ -6,16 +6,19 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+
   email: {
     type: String,
     required: true,
     unique: true,
     trim: true,
   },
+
   password: {
     type: String,
     required: true,
   },
+
   role: {
     type: String,
     enum: ["admin", "user"],
@@ -31,7 +34,7 @@ const userSchema = new mongoose.Schema({
     },
   ],
 
-  // 🧩 الكولكشنز المسموحة للمستخدم (نضيفها الآن لدعم صلاحيات Collections)
+  // 🧩 الكولكشنز المسموحة للمستخدم (صلاحيات Collections)
   collections: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -39,13 +42,15 @@ const userSchema = new mongoose.Schema({
       default: [],
     },
   ],
-});
 
-allowedForms: [
-  {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Form",
-  },
-],
+  // 🧩 الفورمات المسموحة للمستخدم (صلاحيات Forms)
+  allowedForms: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Form",
+      default: [],
+    },
+  ],
+});
 
 module.exports = mongoose.model("User", userSchema);

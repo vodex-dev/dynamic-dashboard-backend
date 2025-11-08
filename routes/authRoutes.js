@@ -10,15 +10,17 @@ const authMiddleware = require("../middleware/authMiddleware");
 ============================================================ */
 router.post("/register", async (req, res) => {
   try {
-    const { username, password, role } = req.body;
+    const { username, email, password, role } = req.body;
 
-    const existingUser = await User.findOne({ username });
+    // 🔍 تحقق من وجود المستخدم مسبقًا
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
-      return res.status(400).json({ message: "❌ المستخدم موجود بالفعل" });
+      return res.status(400).json({ message: "❌ اسم المستخدم أو البريد مستخدم مسبقًا" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, password: hashedPassword, role });
+
+    const user = new User({ username, email, password: hashedPassword, role });
     await user.save();
 
     res.status(201).json({ message: "✅ تم إنشاء المستخدم بنجاح" });
@@ -55,6 +57,7 @@ router.post("/login", async (req, res) => {
       message: "✅ تسجيل الدخول ناجح",
       token,
       role: user.role,
+      userId: user._id,
     });
   } catch (err) {
     console.error("❌ خطأ في تسجيل الدخول:", err);
@@ -92,13 +95,9 @@ router.get("/users/:userId/pages", authMiddleware, async (req, res) => {
     }
 
     const user = await User.findById(targetId).populate("allowedPages", "name");
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.status(200).json({
-      data: user.allowedPages || [],
-    });
+    res.status(200).json({ data: user.allowedPages || [] });
   } catch (error) {
     console.error("❌ Error fetching user pages:", error);
     res.status(500).json({ message: "Failed to fetch user pages" });
@@ -119,9 +118,7 @@ router.put("/users/:userId/pages", authMiddleware, async (req, res) => {
       { new: true }
     ).populate("allowedPages", "name");
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
 
     res.json({
       message: "✅ User pages updated successfully",
@@ -146,13 +143,9 @@ router.get("/users/:userId/collections", authMiddleware, async (req, res) => {
     }
 
     const user = await User.findById(targetId).populate("collections", "name");
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.status(200).json({
-      data: user.collections || [],
-    });
+    res.status(200).json({ data: user.collections || [] });
   } catch (error) {
     console.error("❌ Error fetching user collections:", error);
     res.status(500).json({ message: "Failed to fetch user collections" });
@@ -173,9 +166,7 @@ router.put("/users/:userId/collections", authMiddleware, async (req, res) => {
       { new: true }
     ).populate("collections", "name");
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
 
     res.json({
       message: "✅ User collections updated successfully",
@@ -200,13 +191,9 @@ router.get("/users/:userId/forms", authMiddleware, async (req, res) => {
     }
 
     const user = await User.findById(targetId).populate("allowedForms", "name");
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.status(200).json({
-      data: user.allowedForms || [],
-    });
+    res.status(200).json({ data: user.allowedForms || [] });
   } catch (error) {
     console.error("❌ Error fetching user forms:", error);
     res.status(500).json({ message: "Failed to fetch user forms" });
@@ -227,9 +214,7 @@ router.put("/users/:userId/forms", authMiddleware, async (req, res) => {
       { new: true }
     ).populate("allowedForms", "name");
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
 
     res.json({
       message: "✅ User forms updated successfully",

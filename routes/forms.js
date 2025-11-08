@@ -4,16 +4,20 @@ const router = express.Router();
 const Form = require("../models/Form");
 const FormField = require("../models/FormField");
 const FormResponse = require("../models/FormResponse");
-const User = require("../models/User"); // ✅ مضافة لدعم allowedForms
+const User = require("../models/User"); // ✅ لدعم صلاحيات الفورمات
 const authMiddleware = require("../middleware/authMiddleware");
 const adminOnly = require("../middleware/adminOnly");
 
 /* ============================================================
-   ✅ إنشاء فورم جديد (Admins فقط)
+   🧩 إنشاء فورم جديد (Admins فقط)
 ============================================================ */
 router.post("/", authMiddleware, adminOnly, async (req, res) => {
   try {
     const { name, description } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: "❌ يجب إدخال اسم الفورم" });
+    }
 
     const newForm = await Form.create({
       name,
@@ -40,15 +44,22 @@ router.get("/", authMiddleware, async (req, res) => {
   try {
     const user = req.user;
 
-    // ✅ في حالة الأدمن → عرض جميع الفورمات
     if (user.role === "admin") {
+      // ✅ الأدمن يشوف كل الفورمات
       const forms = await Form.find().populate("createdBy", "username");
       return res.status(200).json(forms);
     }
 
-    // ✅ المستخدم العادي → عرض الفورمات المسموحة له فقط
-    const userDoc = await User.findById(user.userId).populate("allowedForms");
+    // ✅ المستخدم العادي يشوف فقط الفورمات المسموحة له
+    const userDoc = await User.findById(user.userId).populate("allowedForms", "name");
+    if (!userDoc) {
+      return res.status(404).json({ message: "❌ المستخدم غير موجود" });
+    }
+
     const allowedFormIds = userDoc.allowedForms.map((f) => f._id);
+    if (allowedFormIds.length === 0) {
+      return res.status(200).json([]); // ما عنده صلاحيات
+    }
 
     const forms = await Form.find({ _id: { $in: allowedFormIds } });
     res.status(200).json(forms);
@@ -66,7 +77,7 @@ router.post("/:formId/fields", authMiddleware, adminOnly, async (req, res) => {
     const { name, label, type, required, options, placeholder, order } = req.body;
     const { formId } = req.params;
 
-    // تحقق من وجود الفورم
+    // ✅ تحقق من وجود الفورم
     const form = await Form.findById(formId);
     if (!form) {
       return res.status(404).json({ message: "❌ الفورم غير موجود" });
@@ -83,7 +94,6 @@ router.post("/:formId/fields", authMiddleware, adminOnly, async (req, res) => {
       order,
     });
 
-    // أضف الحقل إلى الفورم
     form.fields.push(newField._id);
     await form.save();
 
@@ -103,6 +113,21 @@ router.post("/:formId/fields", authMiddleware, adminOnly, async (req, res) => {
 router.get("/:formId/fields", authMiddleware, async (req, res) => {
   try {
     const { formId } = req.params;
+
+    // ✅ تحقق من الصلاحية (إذا مو أدمن)
+    if (req.user.role !== "admin") {
+      const user = await User.findById(req.user.userId);
+      if (!user) {
+        return res.status(404).json({ message: "❌ المستخدم غير موجود" });
+      }
+      const hasAccess = user.allowedForms.some(
+        (form) => form.toString() === formId
+      );
+      if (!hasAccess) {
+        return res.status(403).json({ message: "❌ لا تملك صلاحية عرض هذا الفورم" });
+      }
+    }
+
     const fields = await FormField.find({ formId }).sort({ order: 1 });
     res.status(200).json(fields);
   } catch (err) {
@@ -112,7 +137,7 @@ router.get("/:formId/fields", authMiddleware, async (req, res) => {
 });
 
 /* ============================================================
-   📬 استقبال الردود من المستخدمين (واجهة عامة - بدون توكن)
+   📬 استقبال الردود من المستخدمين (واجهة عامة)
 ============================================================ */
 router.post("/:formId/submit", async (req, res) => {
   try {
