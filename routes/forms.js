@@ -120,11 +120,14 @@ router.get("/:formId/fields", authMiddleware, async (req, res) => {
       if (!user) {
         return res.status(404).json({ message: "❌ المستخدم غير موجود" });
       }
+
       const hasAccess = user.allowedForms.some(
         (form) => form.toString() === formId
       );
       if (!hasAccess) {
-        return res.status(403).json({ message: "❌ لا تملك صلاحية عرض هذا الفورم" });
+        return res
+          .status(403)
+          .json({ message: "❌ لا تملك صلاحية عرض هذا الفورم" });
       }
     }
 
@@ -174,12 +177,52 @@ router.post("/:formId/submit", async (req, res) => {
 });
 
 /* ============================================================
-   🗂️ جلب الردود الخاصة بفورم (Admins فقط)
+   🗂️ جلب الردود الخاصة بفورم
+   - Admin: يشوف كل الردود
+   - User: يشوف فقط الفورمات المسموحة له
 ============================================================ */
-router.get("/:formId/responses", authMiddleware, adminOnly, async (req, res) => {
+router.get("/:formId/responses", authMiddleware, async (req, res) => {
   try {
     const { formId } = req.params;
-    const responses = await FormResponse.find({ formId }).sort({ createdAt: -1 });
+    const user = req.user;
+
+    // ✅ تحقق من وجود الفورم
+    const form = await Form.findById(formId);
+    if (!form) {
+      return res.status(404).json({ message: "❌ الفورم غير موجود" });
+    }
+
+    // ✅ الأدمن يشوف كل الردود
+    if (user.role === "admin") {
+      const responses = await FormResponse.find({ formId }).sort({
+        createdAt: -1,
+      });
+      return res.status(200).json(responses);
+    }
+
+    // ✅ المستخدم العادي → تحقق من الصلاحية
+    const userDoc = await User.findById(user.userId);
+    if (!userDoc) {
+      return res.status(404).json({ message: "❌ المستخدم غير موجود" });
+    }
+
+    const allowedFormIds = userDoc.allowedForms || [];
+    const formIdStr = formId.toString();
+    const isAllowed = allowedFormIds.some((id) => {
+      const idStr = (id._id || id).toString();
+      return idStr === formIdStr;
+    });
+
+    if (!isAllowed) {
+      return res.status(403).json({
+        message: "🚫 لا تملك صلاحية لعرض الردود لهذا الفورم",
+      });
+    }
+
+    // ✅ جلب الردود للفورم المسموح به
+    const responses = await FormResponse.find({ formId }).sort({
+      createdAt: -1,
+    });
     res.status(200).json(responses);
   } catch (err) {
     console.error("❌ خطأ في جلب الردود:", err);
