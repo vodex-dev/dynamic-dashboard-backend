@@ -1,15 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const Collection = require("../models/Collection");
+const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
 const adminOnly = require("../middleware/adminOnly");
 
 /* =====================================================
-   ✅ جلب جميع الكولكشنز (Admins فقط)
+   ✅ جلب جميع الكولكشنز
+   - Admin: يشوف كل الكولكشنز
+   - User: يشوف فقط الكولكشنز المسموحة له
 ===================================================== */
-router.get("/", authMiddleware, adminOnly, async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   try {
-    const collections = await Collection.find().populate("createdBy", "username");
+    let collections;
+
+    if (req.user.role === "admin") {
+      // ✅ المدير يشوف كل الكولكشنز
+      collections = await Collection.find().populate("createdBy", "username");
+    } else {
+      // ✅ المستخدم العادي يشوف فقط الكولكشنز المسموحة له
+      const user = await User.findById(req.user.userId).populate("collections");
+      collections = user?.collections || [];
+    }
+
     res.status(200).json(collections);
   } catch (err) {
     console.error("❌ خطأ في جلب الكولكشنز:", err);

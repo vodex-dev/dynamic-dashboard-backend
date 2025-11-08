@@ -153,5 +153,64 @@ router.put("/users/:userId/pages", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Failed to update user pages" });
   }
 });
+/* ============================================================
+   📦 جلب الكولكشنز المسموح بها لمستخدم معيّن
+   (Admins أو المستخدم نفسه فقط)
+   ============================================================ */
+router.get("/users/:userId/collections", authMiddleware, async (req, res) => {
+  try {
+    const requesterId = req.user.userId || req.user.id;
+    const targetId = req.params.userId;
+
+    // 🔒 السماح فقط للإدمن أو المستخدم نفسه
+    if (req.user.role !== "admin" && requesterId !== targetId) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    // 🔍 جلب المستخدم مع الكولكشنز المسموحة
+    const user = await User.findById(targetId).populate("collections", "name");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      data: user.collections || [],
+    });
+  } catch (error) {
+    console.error("❌ Error fetching user collections:", error);
+    res.status(500).json({ message: "Failed to fetch user collections" });
+  }
+});
+
+/* ============================================================
+   ✏️ تحديث الكولكشنز المسموح بها لمستخدم معيّن (Admins فقط)
+   ============================================================ */
+router.put("/users/:userId/collections", authMiddleware, async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admin only." });
+    }
+
+    const { collectionIds } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      { collections: collectionIds },
+      { new: true }
+    ).populate("collections", "name");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "✅ User collections updated successfully",
+      data: updatedUser.collections,
+    });
+  } catch (error) {
+    console.error("❌ Error updating user collections:", error);
+    res.status(500).json({ message: "Failed to update user collections" });
+  }
+});
 
 module.exports = router;
