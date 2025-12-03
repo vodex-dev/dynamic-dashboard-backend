@@ -1,0 +1,395 @@
+
+> dynamic-dashboard@1.0.1 start
+> node server.js
+
+(node:72612) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
+ SDK releases are limited to address critical bug fixes and security issues only.
+
+Please migrate your code to use AWS SDK for JavaScript (v3).
+For more information, check the blog post at https://a.co/cUPnyil
+(Use `node --trace-warnings ...` to show where the warning was created)
+✅ Connected to MongoDB
+🚀 Server running on port 4000
+🗑️ Attempting to delete item with ID: 692d9ef935259b2f4ca0f5bf
+✅ Item deleted successfully: 692d9ef935259b2f4ca0f5bf
+❌ خطأ في تحديث العنصر: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "CollectionItem"
+    at SchemaObjectId.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schema/objectId.js:253:11)
+    at SchemaType.applySetters (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1288:12)
+    at SchemaType.castForQuery (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1724:17)
+    at cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/cast.js:390:32)
+    at Query.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:5060:12)
+    at Query._castConditions (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:2374:10)
+    at model.Query._findOneAndUpdate (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:3477:8)
+    at model.Query.exec (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:4627:80)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/routes/collectionItemRoutes.js:68:25 {
+  stringValue: '"undefined"',
+  messageFormat: undefined,
+  kind: 'ObjectId',
+  value: 'undefined',
+  path: '_id',
+  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
+      at new ObjectId (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/bson/lib/bson.cjs:2538:23)
+      at castObjectId (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/cast/objectid.js:25:12)
+      at SchemaObjectId.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schema/objectId.js:251:12)
+      at SchemaType.applySetters (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1288:12)
+      at SchemaType.castForQuery (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1724:17)
+      at cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/cast.js:390:32)
+      at Query.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:5060:12)
+      at Query._castConditions (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:2374:10)
+      at model.Query._findOneAndUpdate (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:3477:8)
+      at model.Query.exec (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:4627:80),
+  valueType: 'string'
+}
+❌ خطأ في تحديث العنصر: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "CollectionItem"
+    at SchemaObjectId.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schema/objectId.js:253:11)
+    at SchemaType.applySetters (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1288:12)
+    at SchemaType.castForQuery (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1724:17)
+    at cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/cast.js:390:32)
+    at Query.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:5060:12)
+    at Query._castConditions (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:2374:10)
+    at model.Query._findOneAndUpdate (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:3477:8)
+    at model.Query.exec (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:4627:80)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/routes/collectionItemRoutes.js:68:25 {
+  stringValue: '"undefined"',
+  messageFormat: undefined,
+  kind: 'ObjectId',
+  value: 'undefined',
+  path: '_id',
+  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
+      at new ObjectId (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/bson/lib/bson.cjs:2538:23)
+      at castObjectId (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/cast/objectid.js:25:12)
+      at SchemaObjectId.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schema/objectId.js:251:12)
+      at SchemaType.applySetters (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1288:12)
+      at SchemaType.castForQuery (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1724:17)
+      at cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/cast.js:390:32)
+      at Query.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:5060:12)
+      at Query._castConditions (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:2374:10)
+      at model.Query._findOneAndUpdate (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:3477:8)
+      at model.Query.exec (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:4627:80),
+  valueType: 'string'
+}
+❌ خطأ في تحديث العنصر: CastError: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "CollectionItem"
+    at SchemaObjectId.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schema/objectId.js:253:11)
+    at SchemaType.applySetters (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1288:12)
+    at SchemaType.castForQuery (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1724:17)
+    at cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/cast.js:390:32)
+    at Query.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:5060:12)
+    at Query._castConditions (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:2374:10)
+    at model.Query._findOneAndUpdate (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:3477:8)
+    at model.Query.exec (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:4627:80)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/routes/collectionItemRoutes.js:68:25 {
+  stringValue: '"undefined"',
+  messageFormat: undefined,
+  kind: 'ObjectId',
+  value: 'undefined',
+  path: '_id',
+  reason: BSONError: input must be a 24 character hex string, 12 byte Uint8Array, or an integer
+      at new ObjectId (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/bson/lib/bson.cjs:2538:23)
+      at castObjectId (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/cast/objectid.js:25:12)
+      at SchemaObjectId.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schema/objectId.js:251:12)
+      at SchemaType.applySetters (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1288:12)
+      at SchemaType.castForQuery (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/schemaType.js:1724:17)
+      at cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/cast.js:390:32)
+      at Query.cast (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:5060:12)
+      at Query._castConditions (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:2374:10)
+      at model.Query._findOneAndUpdate (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:3477:8)
+      at model.Query.exec (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:4627:80),
+  valueType: 'string'
+}
+❌ خطأ في جلب العناصر: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+    at Topology.selectServer (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/sdam/topology.js:327:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+    at async tryOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:196:22)
+    at async executeOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:78:16)
+    at async FindCursor._initialize (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/find_cursor.js:62:26)
+    at async FindCursor.cursorInit (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:666:13)
+    at async FindCursor.next (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:342:17) {
+  errorLabelSet: Set(0) {},
+  reason: TopologyDescription {
+    type: 'ReplicaSetNoPrimary',
+    servers: Map(3) {
+      'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-02.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-00.tuodq34.mongodb.net:27017' => [ServerDescription]
+    },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: 'atlas-ksrrhx-shard-0',
+    maxElectionId: new ObjectId('7fffffff000000000000008e'),
+    maxSetVersion: 13,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: 30
+  },
+  code: undefined,
+  [cause]: MongoNetworkError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+      at TLSSocket.<anonymous> (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cmap/connect.js:286:44)
+      at Object.onceWrapper (node:events:622:26)
+      at TLSSocket.emit (node:events:507:28)
+      at TLSSocket.emit (node:domain:489:12)
+      at emitErrorNT (node:internal/streams/destroy:170:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    errorLabelSet: Set(1) { 'ResetPool' },
+    beforeHandshake: false,
+    [cause]: Error: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+        at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+      errno: -3008,
+      code: 'ENOTFOUND',
+      syscall: 'getaddrinfo',
+      hostname: 'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net'
+    }
+  }
+}
+❌ خطأ في جلب الكولكشنز: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+    at Topology.selectServer (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/sdam/topology.js:327:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+    at async tryOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:196:22)
+    at async executeOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:78:16)
+    at async FindCursor._initialize (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/find_cursor.js:62:26)
+    at async FindCursor.cursorInit (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:666:13)
+    at async FindCursor.next (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:342:17) {
+  errorLabelSet: Set(0) {},
+  reason: TopologyDescription {
+    type: 'ReplicaSetNoPrimary',
+    servers: Map(3) {
+      'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-02.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-00.tuodq34.mongodb.net:27017' => [ServerDescription]
+    },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: 'atlas-ksrrhx-shard-0',
+    maxElectionId: new ObjectId('7fffffff000000000000008e'),
+    maxSetVersion: 13,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: 30
+  },
+  code: undefined,
+  [cause]: MongoNetworkError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+      at TLSSocket.<anonymous> (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cmap/connect.js:286:44)
+      at Object.onceWrapper (node:events:622:26)
+      at TLSSocket.emit (node:events:507:28)
+      at TLSSocket.emit (node:domain:489:12)
+      at emitErrorNT (node:internal/streams/destroy:170:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    errorLabelSet: Set(1) { 'ResetPool' },
+    beforeHandshake: false,
+    [cause]: Error: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+        at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+      errno: -3008,
+      code: 'ENOTFOUND',
+      syscall: 'getaddrinfo',
+      hostname: 'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net'
+    }
+  }
+}
+❌ خطأ في جلب الحقول الخاصة بالسكشن: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+    at Topology.selectServer (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/sdam/topology.js:327:38)
+    at async tryOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:196:22)
+    at async executeOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:78:16)
+    at async FindCursor._initialize (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/find_cursor.js:62:26)
+    at async FindCursor.cursorInit (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:666:13)
+    at async FindCursor.next (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:342:17)
+    at async [Symbol.asyncIterator] (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:250:34)
+    at async FindCursor.toArray (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:422:26)
+    at async model.Query._find (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongoose/lib/query.js:2430:14) {
+  errorLabelSet: Set(0) {},
+  reason: TopologyDescription {
+    type: 'ReplicaSetNoPrimary',
+    servers: Map(3) {
+      'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-02.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-00.tuodq34.mongodb.net:27017' => [ServerDescription]
+    },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: 'atlas-ksrrhx-shard-0',
+    maxElectionId: new ObjectId('7fffffff000000000000008e'),
+    maxSetVersion: 13,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: 30
+  },
+  code: undefined,
+  [cause]: MongoNetworkError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+      at TLSSocket.<anonymous> (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cmap/connect.js:286:44)
+      at Object.onceWrapper (node:events:622:26)
+      at TLSSocket.emit (node:events:507:28)
+      at TLSSocket.emit (node:domain:489:12)
+      at emitErrorNT (node:internal/streams/destroy:170:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    errorLabelSet: Set(1) { 'ResetPool' },
+    beforeHandshake: false,
+    [cause]: Error: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+        at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+      errno: -3008,
+      code: 'ENOTFOUND',
+      syscall: 'getaddrinfo',
+      hostname: 'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net'
+    }
+  }
+}
+❌ خطأ في جلب الكولكشنز: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+    at Topology.selectServer (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/sdam/topology.js:327:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+    at async tryOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:148:18)
+    at async executeOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:78:16)
+    at async FindCursor._initialize (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/find_cursor.js:62:26)
+    at async FindCursor.cursorInit (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:666:13)
+    at async FindCursor.next (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:342:17) {
+  errorLabelSet: Set(0) {},
+  reason: TopologyDescription {
+    type: 'ReplicaSetNoPrimary',
+    servers: Map(3) {
+      'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-02.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-00.tuodq34.mongodb.net:27017' => [ServerDescription]
+    },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: 'atlas-ksrrhx-shard-0',
+    maxElectionId: new ObjectId('7fffffff000000000000008e'),
+    maxSetVersion: 13,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: null
+  },
+  code: undefined,
+  [cause]: MongoNetworkError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+      at TLSSocket.<anonymous> (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cmap/connect.js:286:44)
+      at Object.onceWrapper (node:events:622:26)
+      at TLSSocket.emit (node:events:507:28)
+      at TLSSocket.emit (node:domain:489:12)
+      at emitErrorNT (node:internal/streams/destroy:170:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    errorLabelSet: Set(1) { 'ResetPool' },
+    beforeHandshake: false,
+    [cause]: Error: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+        at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+      errno: -3008,
+      code: 'ENOTFOUND',
+      syscall: 'getaddrinfo',
+      hostname: 'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net'
+    }
+  }
+}
+❌ خطأ في جلب الحقول الخاصة بالسكشن: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+    at Topology.selectServer (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/sdam/topology.js:327:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+    at async tryOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:148:18)
+    at async executeOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:78:16)
+    at async FindCursor._initialize (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/find_cursor.js:62:26)
+    at async FindCursor.cursorInit (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:666:13)
+    at async FindCursor.next (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:342:17) {
+  errorLabelSet: Set(0) {},
+  reason: TopologyDescription {
+    type: 'ReplicaSetNoPrimary',
+    servers: Map(3) {
+      'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-02.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-00.tuodq34.mongodb.net:27017' => [ServerDescription]
+    },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: 'atlas-ksrrhx-shard-0',
+    maxElectionId: new ObjectId('7fffffff000000000000008e'),
+    maxSetVersion: 13,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: null
+  },
+  code: undefined,
+  [cause]: MongoNetworkError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+      at TLSSocket.<anonymous> (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cmap/connect.js:286:44)
+      at Object.onceWrapper (node:events:622:26)
+      at TLSSocket.emit (node:events:507:28)
+      at TLSSocket.emit (node:domain:489:12)
+      at emitErrorNT (node:internal/streams/destroy:170:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    errorLabelSet: Set(1) { 'ResetPool' },
+    beforeHandshake: false,
+    [cause]: Error: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+        at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+      errno: -3008,
+      code: 'ENOTFOUND',
+      syscall: 'getaddrinfo',
+      hostname: 'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net'
+    }
+  }
+}
+❌ خطأ في جلب العناصر: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+    at Topology.selectServer (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/sdam/topology.js:327:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+    at async tryOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:148:18)
+    at async executeOperation (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/operations/execute_operation.js:78:16)
+    at async FindCursor._initialize (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/find_cursor.js:62:26)
+    at async FindCursor.cursorInit (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:632:27)
+    at async FindCursor.fetchBatch (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:666:13)
+    at async FindCursor.next (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cursor/abstract_cursor.js:342:17) {
+  errorLabelSet: Set(0) {},
+  reason: TopologyDescription {
+    type: 'ReplicaSetNoPrimary',
+    servers: Map(3) {
+      'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-02.tuodq34.mongodb.net:27017' => [ServerDescription],
+      'ac-hvdsgap-shard-00-00.tuodq34.mongodb.net:27017' => [ServerDescription]
+    },
+    stale: false,
+    compatible: true,
+    heartbeatFrequencyMS: 10000,
+    localThresholdMS: 15,
+    setName: 'atlas-ksrrhx-shard-0',
+    maxElectionId: new ObjectId('7fffffff000000000000008e'),
+    maxSetVersion: 13,
+    commonWireVersion: 0,
+    logicalSessionTimeoutMinutes: null
+  },
+  code: undefined,
+  [cause]: MongoNetworkError: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+      at TLSSocket.<anonymous> (/Users/aliradhi/Documents/ECOTREND Dashboard/dynamic-dashboard-backend-main/node_modules/mongodb/lib/cmap/connect.js:286:44)
+      at Object.onceWrapper (node:events:622:26)
+      at TLSSocket.emit (node:events:507:28)
+      at TLSSocket.emit (node:domain:489:12)
+      at emitErrorNT (node:internal/streams/destroy:170:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    errorLabelSet: Set(1) { 'ResetPool' },
+    beforeHandshake: false,
+    [cause]: Error: getaddrinfo ENOTFOUND ac-hvdsgap-shard-00-01.tuodq34.mongodb.net
+        at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26) {
+      errno: -3008,
+      code: 'ENOTFOUND',
+      syscall: 'getaddrinfo',
+      hostname: 'ac-hvdsgap-shard-00-01.tuodq34.mongodb.net'
+    }
+  }
+}
