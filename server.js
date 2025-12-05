@@ -17,6 +17,9 @@ const collectionUploadRoutes = require("./routes/collectionUploadRoutes");
 const formRoutes = require("./routes/forms");
 const planRoutes = require("./routes/plans");
 const subscriptionRoutes = require("./routes/subscriptions");
+const settingsRoutes = require("./routes/settingsRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const couponRoutes = require("./routes/couponRoutes");
 
 const app = express();
 
@@ -35,13 +38,33 @@ app.use("/api/collection-uploads", collectionUploadRoutes);
 app.use("/api/forms", formRoutes);
 app.use("/api/plans", planRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
+app.use("/api/settings", settingsRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/coupons", couponRoutes);
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
+// Start server even if MongoDB connection fails (for development)
+const startServer = () => {
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📡 API available at http://localhost:${PORT}/api`);
+  });
+};
+
+// Try to connect to MongoDB with timeout
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000, // 5 seconds timeout
+    });
     console.log("✅ Connected to MongoDB");
-    app.listen(process.env.PORT, () =>
-      console.log(`🚀 Server running on port ${process.env.PORT}`)
-    );
-  })
-  .catch((err) => console.error("❌ Database connection error:", err));
+    startServer();
+  } catch (err) {
+    console.error("❌ Database connection error:", err.message);
+    console.log("⚠️  Starting server without MongoDB connection...");
+    console.log("⚠️  Some features may not work until MongoDB is connected");
+    startServer();
+  }
+};
+
+connectDB();

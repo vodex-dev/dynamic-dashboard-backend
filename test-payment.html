@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الدفع - Sindipay</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+        }
+        .result h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .result pre {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .test-cards {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #2196F3;
+        }
+        .test-cards h4 {
+            color: #1976D2;
+            margin-bottom: 10px;
+        }
+        .test-cards .card {
+            background: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .test-cards .card.decline {
+            border-left-color: #f44336;
+        }
+        .test-cards .card strong {
+            color: #333;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 اختبار الدفع - Sindipay</h1>
+        <p class="subtitle">اختبار الدفع مباشرة مع Sindipay API</p>
+        
+        <form id="testForm">
+            <div class="form-group">
+                <label for="amount">المبلغ (IQD):</label>
+                <input type="number" id="amount" name="amount" value="1000" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cardType">نوع البطاقة:</label>
+                <select id="cardType" name="cardType" required>
+                    <option value="success">Success Card (نجاح)</option>
+                    <option value="decline">Decline Card (فشل)</option>
+                </select>
+            </div>
+            
+            <button type="submit" id="submitBtn">🚀 اختبار الدفع</button>
+        </form>
+
+        <div class="test-cards">
+            <h4>💳 البطاقات التجريبية:</h4>
+            <div class="card">
+                <strong>Success Card:</strong><br>
+                Card: 5213 7203 0423 8582<br>
+                CVV: 642 | Expiry: 01/32
+            </div>
+            <div class="card decline">
+                <strong>Decline Card:</strong><br>
+                Card: 2342 3423 4342 1243<br>
+                CVV: 642 | Expiry: 01/32
+            </div>
+        </div>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('testForm');
+        const result = document.getElementById('result');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const amount = document.getElementById('amount').value;
+            const cardType = document.getElementById('cardType').value;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ جاري الاختبار...';
+            
+            result.className = 'result';
+            result.innerHTML = '<div class="loading">⏳ جاري إرسال الطلب...</div>';
+            result.classList.add('show');
+
+            try {
+                const response = await fetch('http://localhost:4000/api/payments/test-direct', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: amount,
+                        cardType: cardType
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    result.className = 'result success';
+                    result.innerHTML = `
+                        <h3>✅ النجاح!</h3>
+                        <p><strong>الرسالة:</strong> ${data.message}</p>
+                        <p><strong>Payment ID:</strong> ${data.paymentId}</p>
+                        <p><strong>Payment URL:</strong> <a href="${data.paymentUrl}" target="_blank">${data.paymentUrl}</a></p>
+                        <p><strong>Order ID:</strong> ${data.testData.orderId}</p>
+                        <p><strong>المبلغ:</strong> ${data.testData.amount} IQD</p>
+                        <h4 style="margin-top: 20px;">📋 النتيجة الكاملة:</h4>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                        <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 5px;">
+                            <h4>🔗 رابط الدفع:</h4>
+                            <a href="${data.paymentUrl}" target="_blank" style="color: #667eea; font-size: 18px; word-break: break-all;">${data.paymentUrl}</a>
+                            <p style="margin-top: 10px; color: #666;">اضغط على الرابط أعلاه لإكمال الدفع باستخدام البطاقة التجريبية</p>
+                        </div>
+                    `;
+                } else {
+                    result.className = 'result error';
+                    result.innerHTML = `
+                        <h3>❌ فشل الاختبار</h3>
+                        <p><strong>الخطأ:</strong> ${data.error || data.message}</p>
+                        <h4>📋 التفاصيل:</h4>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>❌ خطأ في الاتصال</h3>
+                    <p><strong>الخطأ:</strong> ${error.message}</p>
+                    <p>تأكد من أن الـ backend يعمل على http://localhost:4000</p>
+                    <pre>${error.stack}</pre>
+                `;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 اختبار الدفع';
+            }
+        });
+    </script>
+</body>
+</html>
+

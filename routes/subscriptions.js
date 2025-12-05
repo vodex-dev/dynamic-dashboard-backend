@@ -264,5 +264,162 @@ router.post("/assign", authMiddleware, adminOnly, async (req, res) => {
   }
 });
 
+/* ============================================================
+   🚫 إلغاء/حذف اشتراك لمستخدم (Admin فقط)
+============================================================ */
+router.delete("/user/:userId", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { deletePermanently } = req.query; // ?deletePermanently=true لحذف نهائي
+
+    // التحقق من وجود المستخدم
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "❌ المستخدم غير موجود" });
+    }
+
+    if (deletePermanently === 'true') {
+      // حذف نهائي لجميع الاشتراكات
+      const deletedCount = await Subscription.deleteMany({ userId: userId });
+      
+      // إزالة الاشتراك من المستخدم
+      user.currentSubscription = null;
+      await user.save();
+
+      res.status(200).json({
+        message: "✅ تم حذف جميع الاشتراكات نهائياً",
+        deletedCount: deletedCount.deletedCount,
+      });
+    } else {
+      // إلغاء الاشتراكات النشطة فقط
+      const result = await Subscription.updateMany(
+        { userId: userId, status: "active" },
+        { status: "cancelled" }
+      );
+
+      // إزالة الاشتراك من المستخدم
+      user.currentSubscription = null;
+      await user.save();
+
+      res.status(200).json({
+        message: "✅ تم إلغاء الاشتراك بنجاح",
+        cancelledCount: result.modifiedCount,
+      });
+    }
+  } catch (err) {
+    console.error("❌ خطأ في إلغاء/حذف الاشتراك:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ============================================================
+   📋 جلب جميع اشتراكات مستخدم معين (Admin فقط)
+============================================================ */
+router.get("/user/:userId", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const subscriptions = await Subscription.find({ userId: userId })
+      .populate("planId")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(subscriptions);
+  } catch (err) {
+    console.error("❌ خطأ في جلب اشتراكات المستخدم:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ============================================================
+   ✏️ تحديث تاريخ بداية ونهاية الاشتراك (Admin فقط)
+============================================================ */
+router.put("/subscription/:subscriptionId", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const { subscriptionId } = req.params;
+    const { startDate, endDate } = req.body;
+
+    const subscription = await Subscription.findById(subscriptionId);
+    if (!subscription) {
+      return res.status(404).json({ message: "❌ الاشتراك غير موجود" });
+    }
+
+    // تحديث التواريخ إذا تم إرسالها
+    if (startDate) {
+      subscription.startDate = new Date(startDate);
+    }
+    if (endDate) {
+      subscription.endDate = new Date(endDate);
+    }
+
+    // التحقق من أن تاريخ النهاية بعد تاريخ البداية
+    if (subscription.endDate < subscription.startDate) {
+      return res.status(400).json({ message: "❌ تاريخ النهاية يجب أن يكون بعد تاريخ البداية" });
+    }
+
+    await subscription.save();
+    await subscription.populate("planId");
+
+    res.status(200).json({
+      message: "✅ تم تحديث الاشتراك بنجاح",
+      subscription: subscription,
+    });
+  } catch (err) {
+    console.error("❌ خطأ في تحديث الاشتراك:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ============================================================
+   🗑️ حذف/إلغاء اشتراك محدد (Admin فقط)
+============================================================ */
+router.delete("/subscription/:subscriptionId", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const { subscriptionId } = req.params;
+    const { deletePermanently } = req.query; // ?deletePermanently=true لحذف نهائي
+
+    const subscription = await Subscription.findById(subscriptionId);
+    if (!subscription) {
+      return res.status(404).json({ message: "❌ الاشتراك غير موجود" });
+    }
+
+    const userId = subscription.userId;
+
+    if (deletePermanently === 'true') {
+      // حذف نهائي
+      await Subscription.findByIdAndDelete(subscriptionId);
+      
+      // التحقق من أن هذا الاشتراك هو الحالي للمستخدم
+      const user = await User.findById(userId);
+      if (user && user.currentSubscription && user.currentSubscription.toString() === subscriptionId) {
+        user.currentSubscription = null;
+        await user.save();
+      }
+
+      res.status(200).json({
+        message: "✅ تم حذف الاشتراك نهائياً",
+      });
+    } else {
+      // إلغاء الاشتراك (تغيير status إلى cancelled)
+      subscription.status = "cancelled";
+      await subscription.save();
+
+      // التحقق من أن هذا الاشتراك هو الحالي للمستخدم
+      const user = await User.findById(userId);
+      if (user && user.currentSubscription && user.currentSubscription.toString() === subscriptionId) {
+        user.currentSubscription = null;
+        await user.save();
+      }
+
+      res.status(200).json({
+        message: "✅ تم إلغاء الاشتراك بنجاح",
+        subscription: subscription,
+      });
+    }
+  } catch (err) {
+    console.error("❌ خطأ في حذف/إلغاء الاشتراك:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
 

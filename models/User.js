@@ -58,6 +58,39 @@ const userSchema = new mongoose.Schema({
     ref: "Subscription",
     default: null,
   },
+
+  // 🚫 حالة الحساب (معلق أم لا)
+  isSuspended: {
+    type: Boolean,
+    default: false,
+  },
+
+  // 📝 تاريخ آخر تغيير لكلمة المرور
+  lastPasswordChange: {
+    type: Date,
+    default: null,
+  },
+
+  // 📜 سجل تغييرات كلمة المرور
+  passwordHistory: [
+    {
+      changedAt: {
+        type: Date,
+        default: Date.now,
+      },
+      changedBy: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user',
+      },
+    },
+  ],
+
+  // 🔑 كلمة المرور المؤقتة (للعرض عند الإنشاء فقط)
+  tempPassword: {
+    type: String,
+    default: null,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
